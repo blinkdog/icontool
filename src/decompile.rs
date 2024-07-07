@@ -1,4 +1,4 @@
-// main.rs
+// decompile.rs
 // Copyright 2024 Patrick Meade.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -15,29 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-pub mod cmdline;
-pub mod compile;
-pub mod decompile;
+use crate::cmdline::DecompileArgs;
 
-use clap::Parser;
-
-use crate::cmdline::{Cli, Commands};
-use crate::compile::compile;
-use crate::decompile::decompile;
-
-#[cfg(not(tarpaulin_include))]
-fn main() {
-    let cli = Cli::parse();
-
-    match &cli.command {
-        Commands::Compile(args) => {
-            compile(args);
-        }
-        Commands::Decompile(args) => {
-            decompile(args);
-        }
-    }
-}
+pub fn decompile(_args: &DecompileArgs) {}
 
 #[cfg(test)]
 mod tests {
@@ -46,5 +26,23 @@ mod tests {
     #[test]
     fn test_always_succeed() {
         assert!(true);
+    }
+
+    #[test]
+    fn test_compile_default() {
+        let args = DecompileArgs {
+            output: None,
+            file: String::from("tests/data/neck.dmi"),
+        };
+        decompile(&args);
+    }
+
+    #[test]
+    fn test_compile_output() {
+        let args = DecompileArgs {
+            output: Some(String::from("tests/data/neckbeard.dmi.yml")),
+            file: String::from("tests/data/neck.dmi"),
+        };
+        decompile(&args);
     }
 }
