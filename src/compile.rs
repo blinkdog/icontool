@@ -16,8 +16,19 @@
 //---------------------------------------------------------------------------
 
 use crate::cmdline::CompileArgs;
+use crate::error::Result;
 
-pub fn compile(_args: &CompileArgs) {}
+pub fn compile(_args: &CompileArgs) -> Result<()> {
+    // read yaml from file
+    // use indexmap to generate dmi
+    // output dmi
+
+    Ok(())
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #[cfg(test)]
 mod tests {
@@ -32,17 +43,17 @@ mod tests {
     fn test_compile_default() {
         let args = CompileArgs {
             output: None,
-            file: String::from("tests/data/neck.dmi.yml"),
+            file: String::from("tests/data/compile/neck.dmi.yml"),
         };
-        compile(&args);
+        let _ = compile(&args);
     }
 
     #[test]
     fn test_compile_output() {
         let args = CompileArgs {
-            output: Some(String::from("tests/data/neckbeard.dmi")),
-            file: String::from("tests/data/neck.dmi.yml"),
+            output: Some(String::from("tests/data/compile/neckbeard.dmi")),
+            file: String::from("tests/data/compile/neck.dmi.yml"),
         };
-        compile(&args);
+        let _ = compile(&args);
     }
 }

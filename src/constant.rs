@@ -1,4 +1,4 @@
-// main.rs
+// constant.rs
 // Copyright 2024 Patrick Meade.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -15,46 +15,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-pub mod cmdline;
-pub mod compile;
-pub mod constant;
-pub mod decompile;
-pub mod dmi;
-pub mod error;
-pub mod metadata;
+pub const DMI_METADATA_KEY: &str = "__dmi_metadata";
 
-use clap::Parser;
-use std::process::ExitCode;
+pub const DMI_PATH_KEY: &str = "__dmi_path";
 
-use crate::cmdline::{Cli, Commands};
-use crate::compile::compile;
-use crate::decompile::decompile;
-use crate::error::get_error_message;
+pub const IMAGE_HEIGHT_KEY: &str = "__image_height";
 
-#[cfg(not(tarpaulin_include))]
-fn main() -> ExitCode {
-    // parse what the user provided on the command line
-    let cli = Cli::parse();
-
-    // depending on what subcommand the user provided
-    let result = match &cli.command {
-        // compile a .dmi.yml -> .dmi
-        Commands::Compile(args) => compile(args),
-        // decompile a .dmi -> .dmi.yml
-        Commands::Decompile(args) => decompile(args),
-    };
-
-    // if the operation failed for some reason
-    if let Err(x) = result {
-        // print a friendly message on stderr
-        eprintln!("{}", get_error_message(x));
-        // exit (with non-zero to indicate an error)
-        return ExitCode::FAILURE;
-    }
-
-    // exit (with zero to indicate no error)
-    ExitCode::SUCCESS
-}
+pub const IMAGE_WIDTH_KEY: &str = "__image_width";
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -67,5 +34,25 @@ mod tests {
     #[test]
     fn test_always_succeed() {
         assert!(true);
+    }
+
+    #[test]
+    fn test_dmi_metadata_key() {
+        assert_eq!("__dmi_metadata", DMI_METADATA_KEY);
+    }
+
+    #[test]
+    fn test_dmi_path_key() {
+        assert_eq!("__dmi_path", DMI_PATH_KEY);
+    }
+
+    #[test]
+    fn test_image_height_key() {
+        assert_eq!("__image_height", IMAGE_HEIGHT_KEY);
+    }
+
+    #[test]
+    fn test_image_width_key() {
+        assert_eq!("__image_width", IMAGE_WIDTH_KEY);
     }
 }

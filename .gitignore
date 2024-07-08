@@ -6,3 +6,7 @@
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
+
+# don't check in test output
+tests/data/compile/*.dmi
+tests/data/decompile/*.dmi.yml
