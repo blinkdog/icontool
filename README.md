@@ -1,6 +1,26 @@
 # icontool
 Tool for working with BYOND DreamMaker Icon (.dmi) files
 
+## Usage
+Convert a DreamMaker Icon (dmi) file to YAML (yml) file:
+
+    icontool decompile icon.dmi
+    icontool decompile --output icon.dmi.yml icon.dmi
+
+Convert a YAML (yml) file to a DreamMaker Icon (dmi) file:
+
+    icontool compile icon.dmi.yml
+    icontool compile --output icon.dmi icon.dmi.yml
+
+Flatten metadata from a file for use in a YAML (yml) file:
+
+    icontool flat icon.dmi.metadata
+
+Output the metadata contained in a DreamMaker Icon (dmi) file:
+
+    icontool metadata icon.dmi
+    icontool metadata --output icon.dmi.metadata icon.dmi
+
 ## License
 icontool  
 Copyright 2024 Patrick Meade

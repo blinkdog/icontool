@@ -29,6 +29,7 @@ use std::process::ExitCode;
 use crate::cmdline::{Cli, Commands};
 use crate::compile::compile;
 use crate::decompile::decompile;
+use crate::dmi::{flatten_metadata, output_metadata};
 use crate::error::get_error_message;
 
 #[cfg(not(tarpaulin_include))]
@@ -42,6 +43,10 @@ fn main() -> ExitCode {
         Commands::Compile(args) => compile(args),
         // decompile a .dmi -> .dmi.yml
         Commands::Decompile(args) => decompile(args),
+        // flatten metadata into .yml format
+        Commands::Flat(args) => flatten_metadata(args),
+        // output metadata for a .dmi
+        Commands::Metadata(args) => output_metadata(args),
     };
 
     // if the operation failed for some reason

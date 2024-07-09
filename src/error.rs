@@ -22,7 +22,10 @@ pub struct MissingMetadata(pub PathBuf);
 
 #[derive(Debug)]
 pub enum IconToolError {
+    DecodeError(base64::DecodeError),
     DecodingError(png::DecodingError),
+    DecompressError(lz4_flex::block::DecompressError),
+    EncodingError(png::EncodingError),
     ImageError(image::ImageError),
     IncompleteParseError(String),
     Io(std::io::Error),
@@ -31,9 +34,27 @@ pub enum IconToolError {
     Serialize(serde_yml::Error),
 }
 
+impl From<base64::DecodeError> for IconToolError {
+    fn from(error: base64::DecodeError) -> Self {
+        IconToolError::DecodeError(error)
+    }
+}
+
 impl From<png::DecodingError> for IconToolError {
     fn from(error: png::DecodingError) -> Self {
         IconToolError::DecodingError(error)
+    }
+}
+
+impl From<lz4_flex::block::DecompressError> for IconToolError {
+    fn from(error: lz4_flex::block::DecompressError) -> Self {
+        IconToolError::DecompressError(error)
+    }
+}
+
+impl From<png::EncodingError> for IconToolError {
+    fn from(error: png::EncodingError) -> Self {
+        IconToolError::EncodingError(error)
     }
 }
 
@@ -71,8 +92,17 @@ pub type Result<T> = std::result::Result<T, IconToolError>;
 
 pub fn get_error_message(e: IconToolError) -> String {
     match e {
+        IconToolError::DecodeError(x) => {
+            format!("icontool: Unable to decode base64 data: {x}")
+        }
         IconToolError::DecodingError(x) => {
             format!("icontool: Unable to decode .dmi file: {x}")
+        }
+        IconToolError::DecompressError(x) => {
+            format!("icontool: Unable to decompress LZ4 data: {x}")
+        }
+        IconToolError::EncodingError(x) => {
+            format!("icontool: Unable to encode .dmi file: {x}")
         }
         IconToolError::ImageError(x) => {
             format!("icontool: Error decoding .dmi image: {x}")

@@ -33,6 +33,10 @@ pub enum Commands {
     Compile(CompileArgs),
     /// convert a .dmi file to a .dmi.yml file
     Decompile(DecompileArgs),
+    /// flatten metadata into .yml format
+    Flat(FlatArgs),
+    /// output the metadata contained in a .dmi file
+    Metadata(MetadataArgs),
 }
 
 #[derive(Args)]
@@ -45,6 +49,19 @@ pub struct CompileArgs {
 
 #[derive(Args)]
 pub struct DecompileArgs {
+    #[arg(short, long)]
+    pub output: Option<String>,
+
+    pub file: String,
+}
+
+#[derive(Args)]
+pub struct FlatArgs {
+    pub file: String,
+}
+
+#[derive(Args)]
+pub struct MetadataArgs {
     #[arg(short, long)]
     pub output: Option<String>,
 
@@ -131,6 +148,54 @@ mod tests {
                 );
             }
             _ => panic!("Subcommand 'decompile' was not parsed to Commands::Decompile"),
+        }
+    }
+
+    #[test]
+    fn test_flat_default() {
+        let cli = Cli::parse_from(vec![
+            "icontool",
+            "flat",
+            "icons/mob/clothing/neck.dmi.metadata",
+        ]);
+        match &cli.command {
+            Commands::Flat(args) => {
+                assert_eq!("icons/mob/clothing/neck.dmi.metadata", args.file);
+            }
+            _ => panic!("Subcommand 'flat' was not parsed to Commands::Flat"),
+        }
+    }
+
+    #[test]
+    fn test_metadata_default() {
+        let cli = Cli::parse_from(vec!["icontool", "metadata", "icons/mob/clothing/neck.dmi"]);
+        match &cli.command {
+            Commands::Metadata(args) => {
+                assert_eq!("icons/mob/clothing/neck.dmi", args.file);
+                assert_eq!(None, args.output);
+            }
+            _ => panic!("Subcommand 'metadata' was not parsed to Commands::Metadata"),
+        }
+    }
+
+    #[test]
+    fn test_metadata_output() {
+        let cli = Cli::parse_from(vec![
+            "icontool",
+            "metadata",
+            "--output",
+            "icons/mob/clothing/neck.dmi.metadata",
+            "icons/mob/clothing/neck.dmi",
+        ]);
+        match &cli.command {
+            Commands::Metadata(args) => {
+                assert_eq!("icons/mob/clothing/neck.dmi", args.file);
+                assert_eq!(
+                    "icons/mob/clothing/neck.dmi.metadata",
+                    args.output.as_ref().unwrap()
+                );
+            }
+            _ => panic!("Subcommand 'metadata' was not parsed to Commands::Metadata"),
         }
     }
 }

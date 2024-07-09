@@ -15,6 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
+// TODO: this module should probably be refactored as parser.rs or metadata_parser.rs
+
 // This is a nom parser that I hacked together to parse the metadata format
 // that appears in DreamMaker Icon (.dmi) files. It was tested on many icons,
 // in several SpaceStation 13 code bases, including a few icons that looked

@@ -23,6 +23,8 @@ pub const IMAGE_HEIGHT_KEY: &str = "__image_height";
 
 pub const IMAGE_WIDTH_KEY: &str = "__image_width";
 
+pub const ZTXT_KEYWORD: &str = "Description";
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -54,5 +56,10 @@ mod tests {
     #[test]
     fn test_image_width_key() {
         assert_eq!("__image_width", IMAGE_WIDTH_KEY);
+    }
+
+    #[test]
+    fn test_ztxt_keyword() {
+        assert_eq!("Description", ZTXT_KEYWORD);
     }
 }
