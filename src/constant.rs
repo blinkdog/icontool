@@ -23,6 +23,13 @@ pub const IMAGE_HEIGHT_KEY: &str = "__image_height";
 
 pub const IMAGE_WIDTH_KEY: &str = "__image_width";
 
+pub const ICONTOOL_KEYS: [&str; 4] = [
+    DMI_METADATA_KEY,
+    DMI_PATH_KEY,
+    IMAGE_HEIGHT_KEY,
+    IMAGE_WIDTH_KEY,
+];
+
 pub const ZTXT_KEYWORD: &str = "Description";
 
 //---------------------------------------------------------------------------

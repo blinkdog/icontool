@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# optimize
+
+# check if input file is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <input.png>"
+    exit 1
+fi
+
+# run pngcrush
+pngcrush -brute -s -reduce "$1" crush.png
+
+# run optipng
+optipng -o7 -preserve -silent -out opti.png "$1"
+
+# determine which file is smaller
+crush_size=$(stat -c%s "crush.png")
+opti_size=$(stat -c%s "opti.png")
+
+# keep the smaller, delete the larger
+if [ "$crush_size" -lt "$opti_size" ]; then
+    mv crush.png "$1.small"
+    rm opti.png
+else
+    mv opti.png "$1.small"
+    rm crush.png
+fi

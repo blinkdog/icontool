@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# dmiprism
+
+# a prism breaks white light into separate wavelengths (i.e.: a rainbow)
+# dmiprism breaks a merge conflicted .dmi into separate parts
+#
+# .base      <-- the common ancestor of both ours and the incoming version
+# .ours      <-- our current version of the icon before the merge
+# .incoming  <-- the incoming version of the icon during the merge
+# .merged    <-- a copy of '.ours' that you edit to merge the incoming changes
+#
+# these are further expanded into files you can easily modify in a text editor
+#
+# .yml       <-- the icon represented as YAML data
+# .metadata  <-- the DreamMaker Icon (dmi) metadata embedded in the icon
+#
+# after running this script, you'll want to do the following:
+#
+# 1. edit important bits from $BASE.incoming.metadata to $BASE.merged.metadata
+# 2. edit important bits from $BASE.incoming.yml to $BASE.merged.yml
+# 3. icontool flat $BASE.merged.metadata
+# 4. edit output from #3 into $BASE.merged.yml
+# 5. icontool compile $BASE.merged.yml $BASE
+# 6. use `optimize $BASE` to generate $BASE.small
+# 7. mv -v $BASE.small $1
+
+export BASE=$(basename $1)
+
+# get common ancestor, our version, and incoming version
+git show :1:$1 >$BASE.base
+git show :2:$1 >$BASE.ours
+git show :3:$1 >$BASE.incoming
+
+# decompile the icon to yaml for easier handling
+icontool decompile $BASE.base --output $BASE.base.yml
+icontool decompile $BASE.ours --output $BASE.ours.yml
+icontool decompile $BASE.incoming --output $BASE.incoming.yml
+
+# extract the metadata for each icon for easy diff/merging
+icontool metadata $BASE.base --output $BASE.base.metadata
+icontool metadata $BASE.ours --output $BASE.ours.metadata
+icontool metadata $BASE.incoming --output $BASE.incoming.metadata
+
+# create a basis for merging
+cp $BASE.ours.metadata $BASE.merged.metadata
+cp $BASE.ours.yml $BASE.merged.yml

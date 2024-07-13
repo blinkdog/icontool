@@ -27,7 +27,7 @@ use crate::cmdline::DecompileArgs;
 use crate::constant::{DMI_METADATA_KEY, DMI_PATH_KEY, IMAGE_HEIGHT_KEY, IMAGE_WIDTH_KEY};
 use crate::dmi::{read_image, read_metadata};
 use crate::error::Result;
-use crate::metadata::{parse_metadata, DreamMakerIconMetadata};
+use crate::parser::{parse_metadata, DreamMakerIconMetadata};
 
 struct IconStatePixels {
     key: String,
@@ -201,7 +201,7 @@ mod tests {
             output: None,
             file: String::from("tests/data/decompile/neck.dmi"),
         };
-        decompile(&args);
+        let _ = decompile(&args);
     }
 
     #[test]
@@ -210,7 +210,7 @@ mod tests {
             output: Some(String::from("tests/data/decompile/neckbeard.dmi.yml")),
             file: String::from("tests/data/decompile/neck.dmi"),
         };
-        decompile(&args);
+        let _ = decompile(&args);
     }
 
     #[test]

@@ -21,7 +21,9 @@ pub mod constant;
 pub mod decompile;
 pub mod dmi;
 pub mod error;
+pub mod indexmap_helper;
 pub mod metadata;
+pub mod parser;
 
 use clap::Parser;
 use std::process::ExitCode;
@@ -29,8 +31,8 @@ use std::process::ExitCode;
 use crate::cmdline::{Cli, Commands};
 use crate::compile::compile;
 use crate::decompile::decompile;
-use crate::dmi::{flatten_metadata, output_metadata};
 use crate::error::get_error_message;
+use crate::metadata::{flatten_metadata, output_metadata};
 
 #[cfg(not(tarpaulin_include))]
 fn main() -> ExitCode {
@@ -67,7 +69,7 @@ fn main() -> ExitCode {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // use super::*;
 
     #[test]
     fn test_always_succeed() {

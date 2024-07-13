@@ -26,12 +26,18 @@ pub enum IconToolError {
     DecodingError(png::DecodingError),
     DecompressError(lz4_flex::block::DecompressError),
     EncodingError(png::EncodingError),
+    FrameCountMismatch(String, usize, usize),
     ImageError(image::ImageError),
     IncompleteParseError(String),
+    InvalidType(String),
     Io(std::io::Error),
+    MissingKey(String),
     MissingMetadata(MissingMetadata),
     ParseError(String),
+    PathError(String),
     Serialize(serde_yml::Error),
+    TooManyFrames(),
+    TooManyIconStates(u32, u32),
 }
 
 impl From<base64::DecodeError> for IconToolError {
@@ -104,14 +110,23 @@ pub fn get_error_message(e: IconToolError) -> String {
         IconToolError::EncodingError(x) => {
             format!("icontool: Unable to encode .dmi file: {x}")
         }
+        IconToolError::FrameCountMismatch(name, expected, actual) => {
+            format!("icontool: icon_state '{name}' has a mismatched number of frames. Expected {expected} frame(s) from the dmi metadata. Found {actual} frame(s) in the YAML data.")
+        }
         IconToolError::ImageError(x) => {
             format!("icontool: Error decoding .dmi image: {x}")
         }
         IconToolError::IncompleteParseError(x) => {
             format!("icontool: Incomplete parse of .dmi metadata: {x}")
         }
+        IconToolError::InvalidType(x) => {
+            format!("icontool: Type mismatch in YAML data: {x}")
+        }
         IconToolError::Io(x) => {
             format!("icontool: I/O error: {x}")
+        }
+        IconToolError::MissingKey(x) => {
+            format!("icontool: Expected key missing from YAML data: {x}")
         }
         IconToolError::MissingMetadata(x) => {
             format!("icontool: Unable to read metadata from .dmi file: {x:?}")
@@ -119,8 +134,17 @@ pub fn get_error_message(e: IconToolError) -> String {
         IconToolError::ParseError(x) => {
             format!("icontool: Error parsing .dmi metadata: {x}")
         }
+        IconToolError::PathError(x) => {
+            format!("icontool: Error handling paths: {x}")
+        }
         IconToolError::Serialize(x) => {
             format!("icontool: Unable to serialize YAML data: {x}")
+        }
+        IconToolError::TooManyFrames() => {
+            "icontool: YAML contains too many frames to paint.\nThis is a bug in icontool, please report it to the author of icontool.".to_string()
+        }
+        IconToolError::TooManyIconStates(w, h) => {
+            format!("icontool: Attempted to resize image to {w}x{h} which is larger than the allowed 1024x1024.")
         }
     }
 }
@@ -131,7 +155,7 @@ pub fn get_error_message(e: IconToolError) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // use super::*;
 
     #[test]
     fn test_always_succeed() {
