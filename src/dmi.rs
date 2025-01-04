@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-use image::{io::Reader, DynamicImage, ImageFormat};
+use image::{DynamicImage, ImageFormat, ImageReader};
 use std::path::Path;
 use std::{fs::File, io::BufReader};
 
@@ -25,7 +25,7 @@ use crate::error::{IconToolError, MissingMetadata, Result};
 pub fn read_image(path: &Path) -> Result<DynamicImage> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
-    let image = Reader::with_format(reader, ImageFormat::Png).decode()?;
+    let image = ImageReader::with_format(reader, ImageFormat::Png).decode()?;
     Ok(image)
 }
 
