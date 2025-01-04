@@ -30,6 +30,10 @@ pub const ICONTOOL_KEYS: [&str; 4] = [
     IMAGE_WIDTH_KEY,
 ];
 
+pub const MAX_IMAGE_HEIGHT: u32 = 6144;
+
+pub const MAX_IMAGE_WIDTH: u32 = 6144;
+
 pub const ZTXT_KEYWORD: &str = "Description";
 
 //---------------------------------------------------------------------------
@@ -63,6 +67,16 @@ mod tests {
     #[test]
     fn test_image_width_key() {
         assert_eq!("__image_width", IMAGE_WIDTH_KEY);
+    }
+
+    #[test]
+    fn test_max_image_height() {
+        assert_eq!(6144, MAX_IMAGE_HEIGHT);
+    }
+
+    #[test]
+    fn test_max_image_width() {
+        assert_eq!(6144, MAX_IMAGE_WIDTH);
     }
 
     #[test]
