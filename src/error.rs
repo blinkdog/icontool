@@ -17,6 +17,8 @@
 
 use std::path::PathBuf;
 
+use crate::constant::*;
+
 #[derive(Debug)]
 pub struct MissingMetadata(pub PathBuf);
 
@@ -144,7 +146,7 @@ pub fn get_error_message(e: IconToolError) -> String {
             "icontool: YAML contains too many frames to paint.\nThis is a bug in icontool, please report it to the author of icontool.".to_string()
         }
         IconToolError::TooManyIconStates(w, h) => {
-            format!("icontool: Attempted to resize image to {w}x{h} which is larger than the allowed 1024x1024.")
+            format!("icontool: Attempted to resize image to {w}x{h} which is larger than the allowed {MAX_IMAGE_WIDTH}x{MAX_IMAGE_HEIGHT}.")
         }
     }
 }

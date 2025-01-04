@@ -105,7 +105,7 @@ fn get_image_dimensions(
     }
 
     // do a final sanity check
-    if image_width > 1024 || image_height > 1024 {
+    if image_width > MAX_IMAGE_WIDTH || image_height > MAX_IMAGE_HEIGHT {
         return Err(IconToolError::TooManyIconStates(image_width, image_height));
     }
 
